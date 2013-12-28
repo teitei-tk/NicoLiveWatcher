@@ -3,13 +3,19 @@ from lib import (ScraapingBase, Mongo, LiveScrapingObject)
 
 class SpLiveWatchWrapper(object):
     def __init__(self):
-        self.db = AnimeSpWatch()
+        self.spDb      = AnimeSpWatch()
         self.spWatcher = NicoAnimeSpLiveWatcher()
 
+    def get_sp_data(self, key):
+        return self.spDb.get(key)
+
+    def get_all_sp_data(self):
+        return self.spDb.all()
+
     def update_sp_data(self):
-        watchList    = self.spWatcher.all()
+        watchList = self.spWatcher.all()
         for watch in watchList:
-            self.db.update( watch.to_dict() )
+            self.spDb.update(watch.to_dict())
 
 class AnimeSpWatch(Mongo):
     colname = "sp_lives"
@@ -17,6 +23,9 @@ class AnimeSpWatch(Mongo):
     def __init__(self):
         from config import (DB_HOST, DB_NAME)
         self.db = Mongo(DB_HOST, DB_NAME)
+
+    def get(self, key):
+        return self.db.findOne(self.colname, {'vid' : key})
 
     def all(self):
         return self.db.findAll( self.colname ) 

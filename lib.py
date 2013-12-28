@@ -44,14 +44,17 @@ class Mongo:
         client = MongoClient( host, port )
         self.db = client[dbname]
 
-    def find( self, collectionName, findType = 'findAll', key={}):
-        return self[findType]( collectionName, key=key )
+    def find(self, collectionName, findType = 'findAll', key={}):
+        return self[findType](collectionName, key=key)
 
-    def findAll( self, collectionName, key={} ):
-        return self.db[collectionName].find( key )
+    def findOne(self, collectionName, key={}):
+        return self.db[collectionName].find().limit(1)
 
-    def insert( self, collectionName, key ):
-        return self.db[collectionName].insert( key )
+    def findAll(self, collectionName, key={}):
+        return self.db[collectionName].find(key)
+
+    def insert(self, collectionName, key):
+        return self.db[collectionName].insert(key)
 
 
 class LiveScrapingObject(object):
