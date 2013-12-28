@@ -3,8 +3,11 @@ from lib import (ScraapingBase, Mongo, LiveScrapingObject)
 
 class SpLiveWatchWrapper(object):
     def __init__(self):
-        self.spWatch = AnimeSpWatch()
+        self.db = AnimeSpWatch()
         self.spWatcher = NicoAnimeSpLiveWatcher()
+
+    def update_sp_data(self):
+        registerList = self.db.all()
 
 class AnimeSpWatch(Mongo):
     colname = "sp_lives"
@@ -36,37 +39,41 @@ class NicoAnimeSpLiveWatcher(ScraapingBase):
         return liveDatas
     
     def scrapingNicoLiveAnimeData(self, html):
+        import datetime
         liveAnimeDataList = []
-        liveAnimeList = html.body.find('div', {'class' : 'p-live_list'})
+        for animeData in html.body.find('div', {'class' : 'p-live_list'}).findAll('form'):
+            vidObj = animeData.find('input', {'name' : 'vid'})
+            if vidObj.has_key('value'):
+                vid = vidObj['value']
 
-        # title取得
-        for animeData in liveAnimeList.findAll('div', {'class' : 'g-live-title g-live-hq'}):
-            title = animeData.find('a').string.strip()
-            data = dict(liveTitle = title)
-            liveAnimeDataList.append(data)
+            titleObj = animeData.find('input', {'name' : 'title'})
+            if titleObj.has_key('value'):
+                title = titleObj['value']
 
-        liveDatas = []
-        for index, data in enumerate(
-                liveAnimeList.findAll('p', {'class' : 'g-live-airtime reserved'})):
-            # 不要なデータを掃除
-            data.find('span', {'class' : 'p-status_lamp'}).extract()
+            openTimeObj = animeData.find('input', {'name' : 'open_time'})
+            if openTimeObj.has_key('value'):
+                value = int(openTimeObj['value'])
+                openTime = datetime.datetime.fromtimestamp(value)
 
-            openDay = data.find('strong').string
-            data.find('strong').extract()
+            startTimeObj = animeData.find('input', {'name' : 'start_time'})
+            if startTimeObj.has_key('value'):
+                value = int(startTimeObj['value'])
+                startTime = datetime.datetime.fromtimestamp(value)
 
-            openTime = data.get_text().strip().rstrip(' -').replace(u'\xa0', u' ')
-            if index >= len(liveAnimeDataList):
-                break
+            endTimeObj = animeData.find('input', {'name' : 'end_time'})
+            if endTimeObj.has_key('value'):
+                value = int(endTimeObj['value'])
+                endTime = datetime.datetime.fromtimestamp(value)
 
-            datetime = dict(time = openTime, day = openDay)
-            liveAnimeData = liveAnimeDataList[index] 
-            liveData = dict(
-                title        = liveAnimeData.get('liveTitle'),
-                openDatetime = datetime
+            data = dict(
+                vid   = vid,
+                title = title,
+                openDatetime = openTime,
+                startDatetime = startTime,
+                endDatetime = endTime,
                 )
-            
-            obj = LiveScrapingObject(liveData)
+            obj = LiveScrapingObject(data)
             if obj is None:
                 continue
-            liveDatas += [obj]
-        return liveDatas
+            liveAnimeDataList += [obj]
+        return liveAnimeDataList

@@ -58,15 +58,21 @@ class LiveScrapingObject(object):
     def __init__(self, data):
         if data is None:
             return None
+        self.vid            = data.get('vid') or ''
         self.title          = data.get('title') or ''
         self.openDatetime   = data.get('openDatetime') or ''
+        self.startDatetime  = data.get('startDatetime') or ''
+        self.endDatetime    = data.get('endDatetime') or ''
 
         self.__validation()
 
     def to_dict(self):
         return {
+            'vid'           :   self.vid,
             'title'         :   self.title,
-            'openDatetime'  :   self.openDatetime
+            'openDatetime'  :   self.openDatetime,
+            'startDatetime' :   self.startDatetime,
+            'endDatetime'   :   self.endDatetime,
             }
 
     def __validation(self):
