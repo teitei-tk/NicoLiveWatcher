@@ -7,7 +7,9 @@ class SpLiveWatchWrapper(object):
         self.spWatcher = NicoAnimeSpLiveWatcher()
 
     def update_sp_data(self):
-        registerList = self.db.all()
+        watchList    = self.spWatcher.all()
+        for watch in watchList:
+            self.db.update( watch.to_dict() )
 
 class AnimeSpWatch(Mongo):
     colname = "sp_lives"

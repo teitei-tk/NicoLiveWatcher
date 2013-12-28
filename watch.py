@@ -13,10 +13,7 @@ class NicoLiveWatcher(SpLiveWatchWrapper):
 
 def run():
     wather = NicoLiveWatcher()
-    wather.spWatcher.all()
-    for result in wather.spWatcher.all():
-        from pprint import pprint
-        pprint( result.to_dict() )
+    wather.update_sp_data()
 
 if __name__ == "__main__":
     run()
