@@ -15,5 +15,8 @@ class mongo:
     def find( self, collectionName, findType = 'findAll', key={}):
         return self[findType]( collectionName, key=key )
 
+    def findAll( self, collectionName, key={} ):
+        return self.db[collectionName].find( key )
+
     def insert( self, collectionName, key ):
         return self.db[collectionName].insert( key )
