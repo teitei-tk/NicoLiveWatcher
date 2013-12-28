@@ -1,19 +1,29 @@
 # coding:UTF-8
 from lib import (ScraapingBase, Mongo, LiveScrapingObject)
 
-class AnimeSpWatch(Mongo):
-    colname = "n_all_live"
+class SpLiveWatchWrapper(object):
+    def __init__(self):
+        self.spWatch = AnimeSpWatch()
+        self.spWatcher = NicoAnimeSpLiveWatcher()
 
-    def __init__(self, host):
+class AnimeSpWatch(Mongo):
+    colname = "sp_lives"
+
+    def __init__(self):
         from config import (DB_HOST, DB_NAME)
-        self.db = mongo(DB_HOST, DB_NAME)
+        self.db = Mongo(DB_HOST, DB_NAME)
+
+    def all(self):
+        return self.db.findAll( self.colname ) 
 
     def update(self, data):
         self.db.insert(self.colname, data)
 
-
 class NicoAnimeSpLiveWatcher(ScraapingBase):
     url = 'http://ch.nicovideo.jp/anime-sp'
+
+    def all(self):
+        return self.getLiveAnimeObjects()
 
     def getLiveAnimeObjects(self):
         siteData = self.siteDecode(self.url)
