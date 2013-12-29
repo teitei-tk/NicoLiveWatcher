@@ -48,7 +48,7 @@ class Mongo:
         return self[findType](collectionName, key=key)
 
     def findOne(self, collectionName, key={}):
-        return self.db[collectionName].find().limit(1)
+        return self.db[collectionName].find(key).limit(1)
 
     def findAll(self, collectionName, key={}):
         return self.db[collectionName].find(key)
