@@ -13,3 +13,4 @@ virtualenv==1.9.1
 virtualenv-clone==0.2.4
 virtualenvwrapper==3.7.1
 yum-metadata-parser==1.1.2
+pytest==2.5.2
