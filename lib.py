@@ -33,7 +33,6 @@ class ScraapingBase:
         from bs4 import BeautifulSoup
         return BeautifulSoup( html )
 
-
 class Mongo:
     db = None
 

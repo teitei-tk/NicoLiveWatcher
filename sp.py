@@ -1,4 +1,5 @@
 # coding:UTF-8
+from app import app
 from lib import (ScraapingBase, Mongo, LiveScrapingObject)
 
 class SpLiveWatchWrapper(object):
@@ -21,8 +22,7 @@ class AnimeSpWatch(Mongo):
     colname = "sp_lives"
 
     def __init__(self):
-        from config import (DB_HOST, DB_NAME)
-        self.db = Mongo(DB_HOST, DB_NAME)
+        self.db = app.db
 
     def get(self, key):
         return self.db.findOne(self.colname, {'vid' : key})
