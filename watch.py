@@ -6,7 +6,7 @@ from nico import NicoLiveWatcher
 
 def run():
     wather = NicoLiveWatcher()
-    wather.update_sp_data()
+    wather.updateSpData()
 
 if __name__ == "__main__":
     run()

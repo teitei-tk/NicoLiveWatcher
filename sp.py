@@ -6,13 +6,13 @@ class SpLiveWatchWrapper(object):
         self.spDb      = AnimeSpWatch()
         self.spWatcher = NicoAnimeSpLiveWatcher()
 
-    def get_sp_data(self, key):
+    def getSpData(self, key):
         return self.spDb.get(key)
 
-    def get_all_sp_data(self):
+    def getAllSpData(self):
         return self.spDb.all()
 
-    def update_sp_data(self):
+    def updateSpData(self):
         watchList = self.spWatcher.all()
         for watch in watchList:
             self.spDb.update(watch.to_dict())
