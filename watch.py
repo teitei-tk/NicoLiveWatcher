@@ -2,11 +2,7 @@
 # coding:UTF-8
 
 import sys
-from sp import SpLiveWatchWrapper
-
-class NicoLiveWatcher(SpLiveWatchWrapper):
-    def __init__(self):
-        super(NicoLiveWatcher, self).__init__()
+from nico import NicoLiveWatcher
 
 def run():
     wather = NicoLiveWatcher()
