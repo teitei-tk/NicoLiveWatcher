@@ -17,6 +17,7 @@ class SpLiveWatchWrapper(object):
         watchList = self.spWatcher.all()
         for watch in watchList:
             self.spDb.update(watch.to_dict())
+        return True
 
 class AnimeSpWatch(Mongo):
     colname = "sp_lives"
@@ -53,24 +54,29 @@ class NicoAnimeSpLiveWatcher(ScraapingBase):
         import datetime
         liveAnimeDataList = []
         for animeData in html.body.find('div', {'class' : 'p-live_list'}).findAll('form'):
+            vid = None
             vidObj = animeData.find('input', {'name' : 'vid'})
             if vidObj.has_key('value'):
                 vid = vidObj['value']
 
+            title = None
             titleObj = animeData.find('input', {'name' : 'title'})
             if titleObj.has_key('value'):
                 title = titleObj['value']
 
+            openTime = None
             openTimeObj = animeData.find('input', {'name' : 'open_time'})
             if openTimeObj.has_key('value'):
                 value = int(openTimeObj['value'])
                 openTime = datetime.datetime.fromtimestamp(value)
 
+            startTime = None
             startTimeObj = animeData.find('input', {'name' : 'start_time'})
             if startTimeObj.has_key('value'):
                 value = int(startTimeObj['value'])
                 startTime = datetime.datetime.fromtimestamp(value)
 
+            endTime = None
             endTimeObj = animeData.find('input', {'name' : 'end_time'})
             if endTimeObj.has_key('value'):
                 value = int(endTimeObj['value'])
