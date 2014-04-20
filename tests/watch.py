@@ -22,7 +22,6 @@ class TestWatcher(unittest.TestCase):
     def tearDown(self):
         client = MongoClient('localhost')
         client.drop_database('test_db')
-        pass
 
     def testWatch(self):
         assert self.wather.getAllSpData()
